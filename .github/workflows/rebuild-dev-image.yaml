@@ -1,6 +1,4 @@
 on:
-    schedule:
-        -   cron: '0 3 * * *'
     workflow_dispatch:
 name: Rebuild PHP Image for branches
 jobs:
@@ -9,7 +7,7 @@ jobs:
         runs-on: ubuntu-22.04
         strategy:
             matrix:
-                branches: ['13.0', '14.0']
+                branches: ['mg-14-php81']
             fail-fast: false
         permissions:
             contents: read
@@ -29,5 +27,5 @@ jobs:
                 uses: docker/setup-buildx-action@v2
             -   name: Build PHP-FPM image and push it to DockerHub
                 run: |
-                    TAG=shopsys/php-image:${{ matrix.branches }}
+                    TAG=shopsys/php-image:14.0-php81
                     docker buildx build --push --tag ${TAG} --no-cache --platform linux/arm64,linux/amd64 --compress -f ./Dockerfile .
